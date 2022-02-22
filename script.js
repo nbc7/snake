@@ -7,6 +7,10 @@ snake[0] = {
   y: 8 * box
 }
 let direction = "right";
+let food = {
+  x: Math.floor(Math.random() * 15 + 1) * box,
+  y: Math.floor(Math.random() * 15 + 1) * box
+}
 
 function criarBG() {
   context.fillStyle = "lightgreen";
@@ -28,6 +32,7 @@ function start() {
 
   criarBG();
   criarSnake();
+  drawFood();
 
   let snakeX = snake[0].x;
   let snakeY = snake[0].y;
@@ -37,7 +42,11 @@ function start() {
   if (direction == "up") snakeY -= box;
   if (direction == "down") snakeY += box;
 
-  snake.pop();
+  if (snakeX != food.x || snakeY != food.y) snake.pop();
+  else {
+    food.x = Math.floor(Math.random() * 15 + 1) * box;
+    food.y = Math.floor(Math.random() * 15 + 1) * box;
+  }
 
   let newHead = {
     x: snakeX,
@@ -52,6 +61,11 @@ function update(event) {
   if (event.keyCode == 38 && direction != "down") direction = "up";
   if (event.keyCode == 39 && direction != "left") direction = "right";
   if (event.keyCode == 40 && direction != "up") direction = "down";
+}
+
+function drawFood() {
+  context.fillStyle = "red";
+  context.fillRect(food.x, food.y, box, box);
 }
 
 let jogo = setInterval(start, 100);
